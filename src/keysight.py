@@ -2,37 +2,37 @@
 
 # -*- coding: utf8 -*-
 
-import struct
-import numpy as np
-import array
-import struct
+import pandas as pd
 import matplotlib.pyplot as plt
-import os
-import sys
-import time
 
 class convert():
   def __init__(self, inputFileName, outputFileName, showPlot=False):
     self.inputFileName = inputFileName
     self.outputFileName = outputFileName
     self.showPlot = showPlot
-    self.vpos = [[], []]
-    self.hpos = [[], []]
+    self.df = pd.DataFrame()
 
   def read_csv(self):
-    self.info = [[], []]
+    csv_data = []
     print("Opening ", self.inputFileName, " to read LSF data")
     f = open(self.inputFileName, 'r')
+    for line in f:
+      line = line.rstrip('\n')
+      if line[0] != '!':
+        data = line.split(',')
+        if len(data) == 2:
+          data_float = [float(i) for i in data]
+          csv_data.append(data_float)
     f.close()
+    self.df = pd.DataFrame(csv_data, columns=["Frequency", "Amplitude"])
 
   def save_tsv(self):
     print("Opening ", self.outputFileName, " to write TSV data")
-    f = open(self.outputFileName, 'w')
-    f.close()
+    self.df.to_csv(self.outputFileName, index=False, sep='\t')
     print('Done!')
 
   def show_plots(self):
-    plt.plot()
+    self.df.plot(x='Frequency', y='Amplitude', style='o')
     plt.show()
 
   def run(self):

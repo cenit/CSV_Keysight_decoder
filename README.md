@@ -1,6 +1,6 @@
 # CSV_Keysight_decoder
 
-`CSV_Keysight_decoder` is a small tool to decode and plot `CSV` files produced by Keisight VNA
+`CSV_Keysight_decoder` is a small tool to decode and plot `CSV` files produced by Keysight VNA
 
 ## Prerequisites
 
