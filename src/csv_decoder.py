@@ -12,7 +12,7 @@ if __name__ == '__main__':
   parser.add_argument('--showPlot', dest='showPlot', default=False, action='store_true', help='Show the plot in a windows after conversion', required=False)
   args = parser.parse_args()
   if args.input_file is not None and args.output_file is not None:
-    a = keysight.convert(inputFileName=args.input_file, outputFileName=args.output_file, showPlot=args.showPlot)
+    a = keysight.custom_csv(f=open(args.input_file, 'r'), outputFileName=args.output_file, showPlot=args.showPlot)
   else:
     parser.print_help()
-  a.run()
+  a.run_converter()
