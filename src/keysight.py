@@ -36,11 +36,12 @@ class custom_csv():
     print('Done!')
 
   def show_plots(self):
-    self.df.plot(x='Frequency', y='Amplitude', style='o')
+    #self.df.plot(x='Frequency', y='Amplitude', style='o')
+    self.df.plot(x='Frequency', y='Amplitude', style='-')
     plt.show()
 
-  def print_stats(self):
-    id_pos = self.f.name.split(os.sep)[-1].split('.')[0]
+  def create_stats(self):
+    self.id_pos = self.f.name.split(os.sep)[-1].split('.')[0]
     maxval = self.df[self.df['Amplitude'] == self.df['Amplitude'].max()]
     maxvalAmpl = maxval.iloc[0]['Amplitude']
     self.F_R = maxval.iloc[0]['Frequency']
@@ -59,9 +60,12 @@ class custom_csv():
     x3b = right_minus3db_val.iloc[1]['Amplitude']
     y3 = y3a + (-reqvalAmpl - x3a) * (y3b - y3a) / (x3b - x3a)
     self.bandwidth = y3-y1
-    #print("ID: ", id_pos, ", F_R: ",  np.int64(self.F_R), ", BW: ", np.int64(self.bandwidth))
-    #print("ID: %s, F_R: %i, BW: %i" % (id_pos, np.int64(self.F_R), np.int64(self.bandwidth)))
-    print("%s, %i, %i" % (id_pos, np.int64(self.F_R), np.int64(self.bandwidth)))
+    return (self.id_pos, np.int64(self.F_R), np.int64(self.bandwidth))
+
+  def print_stats(self):
+    id, fr, bw = self.create_stats()
+    print("%s, %i, %i" % (id, fr, bw))
+    #print("%s, %i, %i" % (self.id_pos, np.int64(self.F_R), np.int64(self.bandwidth)))
 
   def run_converter(self):
     self.read_csv()
@@ -72,4 +76,5 @@ class custom_csv():
 
   def run_stats(self):
     self.read_csv()
+    #self.create_stats()
     self.print_stats()
