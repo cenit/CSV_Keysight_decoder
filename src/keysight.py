@@ -15,6 +15,7 @@ class custom_csv():
     self.deltaBW = deltaBW
     self.F_R = None
     self.bandwidth = None
+    self.maxvalAmpl = None
 
   def read_csv(self):
     csv_data = []
@@ -40,12 +41,8 @@ class custom_csv():
     self.df.plot(x='Frequency', y='Amplitude', style='-')
     plt.show()
 
-  def create_stats(self):
-    self.id_pos = self.f.name.split(os.sep)[-1].split('.')[0]
-    maxval = self.df[self.df['Amplitude'] == self.df['Amplitude'].max()]
-    maxvalAmpl = maxval.iloc[0]['Amplitude']
-    self.F_R = maxval.iloc[0]['Frequency']
-    reqvalAmpl = abs(maxvalAmpl)+self.deltaBW
+  def get_lateral_tones(self):
+    reqvalAmpl = abs(self.maxvalAmpl)+self.deltaBW
     minus3db_val = self.df.iloc[(self.df['Amplitude'].abs()-reqvalAmpl).abs().argsort()[:4]].sort_index()
     left_minus3db_val = minus3db_val[0:2]
     y1a = left_minus3db_val.iloc[0]['Frequency']
@@ -59,7 +56,15 @@ class custom_csv():
     x3a = right_minus3db_val.iloc[0]['Amplitude']
     x3b = right_minus3db_val.iloc[1]['Amplitude']
     y3 = y3a + (-reqvalAmpl - x3a) * (y3b - y3a) / (x3b - x3a)
-    self.bandwidth = y3-y1
+    return (y1, y3)
+
+  def create_stats(self):
+    self.id_pos = self.f.name.split(os.sep)[-1].split('.')[0]
+    maxval = self.df[self.df['Amplitude'] == self.df['Amplitude'].max()]
+    self.maxvalAmpl = maxval.iloc[0]['Amplitude']
+    self.F_R = maxval.iloc[0]['Frequency']
+    f1, f3 = self.get_lateral_tones()
+    self.bandwidth = f3-f1
     return (self.id_pos, np.int64(self.F_R), np.int64(self.bandwidth))
 
   def print_stats(self):
