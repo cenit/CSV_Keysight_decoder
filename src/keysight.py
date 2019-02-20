@@ -14,8 +14,13 @@ class custom_csv():
     self.df = None
     self.deltaBW = deltaBW
     self.F_R = None
-    self.bandwidth = None
+    self.f1 = None
+    self.f3 = None
     self.maxvalAmpl = None
+    self.id_pos = None
+
+  def get_data(self):
+    return (self.id_pos, self.F_R, self.f1, self.f3, self.maxvalAmpl)
 
   def read_csv(self):
     csv_data = []
@@ -63,14 +68,14 @@ class custom_csv():
     maxval = self.df[self.df['Amplitude'] == self.df['Amplitude'].max()]
     self.maxvalAmpl = maxval.iloc[0]['Amplitude']
     self.F_R = maxval.iloc[0]['Frequency']
-    f1, f3 = self.get_lateral_tones()
-    self.bandwidth = f3-f1
-    return (self.id_pos, np.int64(self.F_R), np.int64(self.bandwidth))
+    self.f1, self.f3 = self.get_lateral_tones()
+    bandwidth = self.f3-self.f1
+    return (self.id_pos, np.int64(self.F_R), np.int64(bandwidth))
 
   def print_stats(self):
     id, fr, bw = self.create_stats()
     print("%s, %i, %i" % (id, fr, bw))
-    #print("%s, %i, %i" % (self.id_pos, np.int64(self.F_R), np.int64(self.bandwidth)))
+    #print("%s, %i, %i" % (self.id_pos, np.int64(self.F_R), np.int64(self.f3 - self.f1)))
 
   def run_converter(self):
     self.read_csv()
