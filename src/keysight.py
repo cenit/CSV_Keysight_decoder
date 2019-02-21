@@ -32,6 +32,7 @@ class custom_csv():
           data_float = [float(i) for i in data]
           csv_data.append(data_float)
     self.df = pd.DataFrame(csv_data, columns=["Frequency", "Amplitude"])
+    return (self.df)
 
   def close_inputFile(self):
     self.f.close()
