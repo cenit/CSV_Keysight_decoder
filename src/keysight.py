@@ -16,11 +16,15 @@ class custom_csv():
     self.F_R = None
     self.f1 = None
     self.f3 = None
+    self.f1_orig = None
+    self.a1_orig = None
+    self.f3_orig = None
+    self.a3_orig = None
     self.maxvalAmpl = None
     self.id_pos = None
 
   def get_data(self):
-    return (self.id_pos, self.F_R, self.f1, self.f3, self.maxvalAmpl)
+    return (self.id_pos, self.F_R, self.f1, self.f3, self.maxvalAmpl, self.f1_orig, self.a1_orig, self.f3_orig, self.a3_orig)
 
   def read_csv(self):
     csv_data = []
@@ -62,6 +66,10 @@ class custom_csv():
     x3a = right_minus3db_val.iloc[0]['Amplitude']
     x3b = right_minus3db_val.iloc[1]['Amplitude']
     y3 = y3a + (-reqvalAmpl - x3a) * (y3b - y3a) / (x3b - x3a)
+    self.f1_orig = y1a
+    self.a1_orig = x1a
+    self.f3_orig = y3b
+    self.a3_orig = x3b
     return (y1, y3)
 
   def create_stats(self):
